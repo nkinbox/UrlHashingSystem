@@ -16,15 +16,6 @@ services:
     volumes:
       - data:/data/db
       - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
-
-  rabbitmq:
-    container_name: RabbitMQ
-    image: rabbitmq:3.10.5-management-alpine
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - newsBytes
   
   redis:
     container_name: Redis
@@ -42,17 +33,15 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
-      - rabbitmq
       - mongo
     links:
       - redis
-      - rabbitmq
       - mongo
     networks:
       - newsBytes
     volumes:
       - .:/var/www/html
-    entrypoint: php-fpm
+    entrypoint: /var/www/html/entrypoint.sh
   
   nginx:
     image: nginx:1.23.4-alpine

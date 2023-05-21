@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libexif-dev \
     libssl-dev \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo_mysql mbstring zip exif
@@ -35,5 +36,8 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 RUN composer install
 
+RUN php artisan migrate
+
+COPY worker.conf /etc/supervisor/conf.d/worker.conf
 
 

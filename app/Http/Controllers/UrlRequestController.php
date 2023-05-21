@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\UrlRequest;
+use App\Events\UrlRequestRaised;
 
 class UrlRequestController extends Controller
 {
@@ -37,6 +38,8 @@ class UrlRequestController extends Controller
         $newRequest->is_once = $request->is_once?true:false;
         $newRequest->is_active = false;
         $newRequest->save();
+
+        UrlRequestRaised::dispatch($newRequest);
 
         return response()->json([
             'success' => true,
