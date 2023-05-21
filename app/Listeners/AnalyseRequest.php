@@ -5,6 +5,8 @@ namespace App\Listeners;
 use App\Events\NewIncomingRequest;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Models\Analytics;
+
 
 class AnalyseRequest implements ShouldQueue
 {

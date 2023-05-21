@@ -46,11 +46,11 @@ class AssignShortUrl implements ShouldQueue
 
             // publish this URL
             $publish = new Url;
-            $url->short_url = $this->url->short_url;
-            $url->long_url = $this->url->long_url;
-            $url->is_once = $this->url->is_once;
-            $url->is_active = $this->url->is_active;
-            $url->save();
+            $publish->short_url = $this->url->short_url;
+            $publish->long_url = $this->url->long_url;
+            $publish->is_once = $this->url->is_once;
+            $publish->is_active = $this->url->is_active;
+            $publish->save();
         } else {
             CreateShortUrls::dispatch();
             self::dispatch($this->url)->delay(now()->addMinutes(1));

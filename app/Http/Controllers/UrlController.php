@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Url;
-use App\Models\Analytics;
 use App\Events\NewIncomingRequest;
 
 class UrlController extends Controller
