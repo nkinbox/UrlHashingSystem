@@ -1,0 +1,74 @@
+version: "3.9"
+services:
+  mongo:
+    container_name: MongoDB
+    image: mongo:4.2.24
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=8538yuN2ZHK3ampr
+      - MONGO_USERNAME=laravel
+      - MONGO_PASSWORD=6hdk9rjklko6ej
+      - MONGO_DATABASE=urls
+    networks:
+      - newsBytes
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/db
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+
+  rabbitmq:
+    container_name: RabbitMQ
+    image: rabbitmq:3.10.5-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - newsBytes
+  
+  redis:
+    container_name: Redis
+    image: redis:7.2-rc2-alpine3.18
+    restart: always
+    networks:
+      - newsBytes
+    ports:
+      - 6379:6379
+
+  app:
+    container_name: Laravel
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongo
+    links:
+      - redis
+      - rabbitmq
+      - mongo
+    networks:
+      - newsBytes
+    volumes:
+      - .:/var/www/html
+    entrypoint: php-fpm
+  
+  nginx:
+    image: nginx:1.23.4-alpine
+    container_name: Nginx
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - newsBytes
+    depends_on:
+      - app
+
+networks:
+  newsBytes:
+
+volumes:
+  data: {}
