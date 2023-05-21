@@ -15,7 +15,7 @@ services:
       - 27017:27017
     volumes:
       - data:/data/db
-      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   
   redis:
     container_name: Redis
@@ -40,8 +40,7 @@ services:
     networks:
       - newsBytes
     volumes:
-      - .:/var/www/html
-    entrypoint: /var/www/html/entrypoint.sh
+      - ./entrypoint.sh:/docker-entrypoint-initdb.d/entrypoint.sh:ro
   
   nginx:
     image: nginx:1.23.4-alpine
