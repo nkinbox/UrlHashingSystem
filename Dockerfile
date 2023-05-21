@@ -36,8 +36,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 RUN composer install
 
-RUN php artisan migrate
-
 COPY worker.conf /etc/supervisor/conf.d/worker.conf
+COPY .env.example /var/www/html/.env
 
 
