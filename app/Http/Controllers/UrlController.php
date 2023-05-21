@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Url;
 use App\Models\Analytics;
+use App\Events\NewIncomingRequest;
 
 class UrlController extends Controller
 {
@@ -18,11 +19,11 @@ class UrlController extends Controller
     public function index(Request $request, $short_url)
     {
         // save incoming request data to Analytics for further processing
-        $analytics = new Analytics;
-        $analytics->short_url = $short_url;
-        $analytics->full_url = $request->fullUrl();
-        $analytics->request_headers = $request->header();
-        $analytics->save();
+        NewIncomingRequest::dispatch([
+            'short_url' => $short_url,
+            'full_url' => $request->fullUrl(),
+            'request_headers' => $request->header()
+        ]);
 
         // check if short url exists and is Active
         $url = Url::where('short_url', $short_url)->first();
