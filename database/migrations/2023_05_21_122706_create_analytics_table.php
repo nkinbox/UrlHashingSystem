@@ -16,7 +16,8 @@ class CreateAnalyticsTable extends Migration
         Schema::create('analytics', function (Blueprint $table) {
             $table->id();
             $table->string('short_url')->index();
-            $table->text('request_headers');
+            $table->string('full_url');
+            $table->json('request_headers');
             $table->timestamps();
         });
     }
